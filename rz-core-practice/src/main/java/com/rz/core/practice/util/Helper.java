@@ -1,4 +1,4 @@
-package com.rz.core.util;
+package com.rz.core.practice.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -21,8 +21,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.rz.core.model.MonitorDto;
-import com.rz.core.model.TagAnnotation;
+import com.rz.core.practice.model.MonitorDto;
+import com.rz.core.practice.model.TagAnnotation;
 
 public class Helper {
 	public static void reflectTest() throws Exception {

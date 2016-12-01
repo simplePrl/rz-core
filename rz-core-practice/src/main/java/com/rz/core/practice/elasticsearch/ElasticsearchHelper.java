@@ -1,4 +1,4 @@
-package com.rz.core.elasticsearch;
+package com.rz.core.practice.elasticsearch;
 
 import java.io.IOException;
 import java.net.InetAddress;

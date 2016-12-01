@@ -1,4 +1,4 @@
-package com.rz.core.localcache;
+package com.rz.core.practice.localcache;
 
 import java.util.Date;
 import java.util.concurrent.ExecutionException;

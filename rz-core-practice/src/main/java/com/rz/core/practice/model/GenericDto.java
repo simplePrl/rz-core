@@ -1,4 +1,4 @@
-package com.rz.core.model;
+package com.rz.core.practice.model;
 
 public class GenericDto<T extends DtoBase> {
 	private T _monitor;

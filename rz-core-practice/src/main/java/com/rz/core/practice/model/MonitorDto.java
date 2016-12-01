@@ -1,4 +1,4 @@
-package com.rz.core.model;
+package com.rz.core.practice.model;
 
 import lombok.Data;
 
