@@ -5,9 +5,7 @@ import lombok.Data;
 @Data
 public class MonitorDto extends DtoBase {
 	@TagAnnotation(value = "TagAnnotation")
-	public String name;
+	private String name;
 	private int age;
-
-	public MonitorDto() {
-	}
+	private MapDto map;
 }
