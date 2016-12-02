@@ -1,5 +1,8 @@
 package com.rz.core.practice.serialization;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rz.core.practice.model.MapDto;
@@ -26,5 +29,10 @@ public class JsonHelper {
 		System.out.println(monitorDto.toString());
 		JSONObject jsonObject = JSON.parseObject(json);		
 		System.out.println(jsonObject.getJSONObject("map").getString("englishName"));
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", "value");
+		map.put("age", 20);
+		System.out.println(JSON.toJSONString(map));
 	} 
 }

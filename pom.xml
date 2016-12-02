@@ -15,6 +15,7 @@
     <org.elasticsearch.version>2.4.2</org.elasticsearch.version>
     <org.projectlombok.version>1.16.10</org.projectlombok.version>
     <com.alibaba.version>1.2.21</com.alibaba.version>
+    <spring-data-redis.verion>1.7.5.RELEASE</spring-data-redis.verion>
   </properties>
   
   <dependencyManagement>
@@ -38,6 +39,11 @@
         <groupId>com.alibaba</groupId>
         <artifactId>fastjson</artifactId>
         <version>${com.alibaba.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-redis</artifactId>
+        <version>${spring-data-redis.verion}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

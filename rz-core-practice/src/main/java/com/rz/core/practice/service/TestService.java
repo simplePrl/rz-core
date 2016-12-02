@@ -20,5 +20,4 @@ public class TestService implements ITestService {
 			return this.elasticsearchClient.settings().toString();
 		}
 	}
-
 }
