@@ -16,6 +16,7 @@
     <org.projectlombok.version>1.16.10</org.projectlombok.version>
     <com.alibaba.version>1.2.21</com.alibaba.version>
     <spring-data-redis.verion>1.7.5.RELEASE</spring-data-redis.verion>
+    <org.apache.httpcomponents.version>4.5.2</org.apache.httpcomponents.version>
   </properties>
   
   <dependencyManagement>
@@ -44,6 +45,11 @@
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-redis</artifactId>
         <version>${spring-data-redis.verion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${org.apache.httpcomponents.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

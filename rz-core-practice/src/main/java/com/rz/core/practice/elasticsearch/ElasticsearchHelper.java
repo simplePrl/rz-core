@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.AliasRequest;
+
 import org.elasticsearch.action.ActionFuture;
+import org.elasticsearch.action.admin.indices.alias.Alias;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -21,6 +26,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -36,16 +42,31 @@ import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
+// Error: Alias [asdAlias] has more than one indices associated with it [[newindex, newindex1]], can't execute a single index op
 public class ElasticsearchHelper {
 	private static String clusterName = "elasticsearch";
-	private static String hostName = "192.168.36.214";//"192.168.127.138";
-	private static String indexName = "crm";//"usertags";
+	private static String hostName = "192.168.127.138";//"192.168.36.214";//
+	private static String indexName = "usertags";//"crm";//
+	private static String aliasName = "fristAlias";
 	private static String typeName = "default";
+	
+	public static void main(String[] args){
+		try {
+			ElasticsearchHelper.Test();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("bottom...");
+	}
 	
 	public static void Test() throws Exception {
 		Settings settings = Settings.builder().put("cluster.name", ElasticsearchHelper.clusterName).build();
 		TransportClient client = TransportClient.builder().settings(settings).build();
 		client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ElasticsearchHelper.hostName), 9300));
+		
+		//client.inde
 
 		// SearchRequestBuilder builder =
 		// client.prepareSearch("comment_index").setTypes("comment_ugc").setSearchType(SearchType.DEFAULT).setFrom(0).setSize(100);
@@ -57,13 +78,43 @@ public class ElasticsearchHelper {
 		// System.out.println(" " + response);
 		// System.out.println(response.getHits().getTotalHits());
 
-//		XContentBuilder xContentBuilder = XContentFactory.jsonBuilder().startObject()
+		XContentBuilder xContentBuilder = null;
+		IndexResponse indexResponse = null;
+//		xContentBuilder = XContentFactory.jsonBuilder().startObject()
 //				.field("leader", 66666)
 //				.field("leaderType", 45)
 //				.field("tags", Arrays.asList(12345, 2222222, Integer.MIN_VALUE, Integer.MAX_VALUE))
 //				.field("update_date", new Date()).endObject();
-		// IndexResponse indexResponse = client.prepareIndex(ElasticsearchHelper.indexName, ElasticsearchHelper.typeName).setSource(xContentBuilder).setId("2").get();		
+//	    indexResponse = client.prepareIndex(ElasticsearchHelper.indexName, ElasticsearchHelper.typeName, "10000").setSource(xContentBuilder).setId("2").get();	
+	    
+//		xContentBuilder = XContentFactory.jsonBuilder().startObject()
+//				.field("leader", 66666)
+//				.field("leaderType", 45)
+//				.field("tags", Arrays.asList(12345, 2222222, Integer.MIN_VALUE, Integer.MAX_VALUE))
+//				.field("update_date", new Date()).endObject();
+//		indexResponse = client.prepareIndex("newindex", ElasticsearchHelper.typeName, "10000").setSource(xContentBuilder).setId("3").get();	
+//	    IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+//		indicesAliasesRequest.addAlias("asdAlias", "newindex");
+//		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
+		
+//		xContentBuilder = XContentFactory.jsonBuilder().startObject()
+//				.field("leader", 66666)
+//				.field("leaderType", 45)
+//				.field("tags", Arrays.asList(12345, 2222222, Integer.MIN_VALUE, Integer.MAX_VALUE))
+//				.field("update_date", new Date()).endObject();
+//		indexResponse = client.prepareIndex("newindex1", ElasticsearchHelper.typeName, "10000").setSource(xContentBuilder).setId("4").get();	
+//	    IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+//		indicesAliasesRequest.addAlias("asdAlias", "newindex1");
+//		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 
+		GetRequest getRequest = new GetRequest();
+		getRequest.index("asdAlias"); // ElasticsearchHelper.indexName
+		getRequest.type(ElasticsearchHelper.typeName);
+		getRequest.id("4");
+		ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
+		GetResponse getResponse = getResponseActionFuture.actionGet();
+		System.out.println(getResponse.getSourceAsString());
+	    
 //		BulkRequest bulkRequest = new BulkRequest();		
 //		for(int i = 0; i < 100000; i++){
 //			xContentBuilder = XContentFactory.jsonBuilder().startObject()
@@ -84,66 +135,66 @@ public class ElasticsearchHelper {
 //		BulkResponse bulkResponse = bulkResponseActionFuture.actionGet();
 //		System.out.println(System.currentTimeMillis() - begin);
 		
-		int length = 100;
-		Thread[] thread = new Thread[length];
-		for(int j = 0; j < length; j++){
-			thread[j] = new Thread(() -> {
-				for(int i = 0; i < 5000; i++){
-					XContentBuilder tempXContentBuilder = null;
-					try{
-						tempXContentBuilder = XContentFactory.jsonBuilder().startObject()
-							.field("user", String.valueOf(Thread.currentThread().getName()) + String.valueOf(i))
-							//.field("leaderType", 45)
-							.field("tags", Arrays.asList("12345", "2222222", "Integer.MIN_VALUE", "Integer.MAX_VALUE"))
-							.field("update_date", new Date()).endObject();
-					}
-					catch(Exception exception){
-						System.out.println(exception.getMessage());
-					}
-					IndexRequest indexRequest = new IndexRequest();
-					indexRequest.index(ElasticsearchHelper.indexName);
-					indexRequest.type(ElasticsearchHelper.typeName);
-					indexRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
-					indexRequest.source(tempXContentBuilder);
-					ActionFuture<IndexResponse> indexRequestActionFuture = client.index(indexRequest);
-					IndexResponse indexResponse = indexRequestActionFuture.actionGet();
-					
-//					UpdateRequest updateRequest = new UpdateRequest();
-//					updateRequest.index(ElasticsearchHelper.indexName);
-//					updateRequest.type(ElasticsearchHelper.typeName);
-//					updateRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
-//					updateRequest.doc(tempXContentBuilder);
-//					ActionFuture<UpdateResponse> updateResponseActionFuture = client.update(updateRequest);
-//					UpdateResponse updateResponse = updateResponseActionFuture.actionGet();
-					
-//					GetRequest getRequest = new GetRequest();
-//					getRequest.index(ElasticsearchHelper.indexName);
-//					getRequest.type(ElasticsearchHelper.typeName);
-//					getRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
-//					getRequest.fields("user", "tags", "update_date");
-//					ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
-//					GetResponse getResponse = getResponseActionFuture.actionGet();
-					
-//					SearchRequest searchRequest = new SearchRequest();
-//					searchRequest.indices(ElasticsearchHelper.indexName);
-//					searchRequest.types(ElasticsearchHelper.typeName);
-//					SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//					searchSourceBuilder.query(QueryBuilders.termQuery("user", String.valueOf(Thread.currentThread().getName()) + String.valueOf(i)));
-//					searchRequest.source(searchSourceBuilder);
-//					ActionFuture<SearchResponse> searchResponseActionFuture = client.search(searchRequest);
-//					SearchResponse searchResponse = searchResponseActionFuture.actionGet();
-				}
-		    }, String.valueOf(j) + "_");
-		}
-		
-		long begin = System.currentTimeMillis();
-		for(int i = 0; i < length; i++){
-			thread[i].start();
-		}
-		for(int i = 0; i < length; i++){
-			thread[i].join();
-		}
-		System.out.println(System.currentTimeMillis() - begin);
+//		int length = 100;
+//		Thread[] thread = new Thread[length];
+//		for(int j = 0; j < length; j++){
+//			thread[j] = new Thread(() -> {
+//				for(int i = 0; i < 5000; i++){
+//					XContentBuilder tempXContentBuilder = null;
+//					try{
+//						tempXContentBuilder = XContentFactory.jsonBuilder().startObject()
+//							.field("user", String.valueOf(Thread.currentThread().getName()) + String.valueOf(i))
+//							//.field("leaderType", 45)
+//							.field("tags", Arrays.asList("12345", "2222222", "Integer.MIN_VALUE", "Integer.MAX_VALUE"))
+//							.field("update_date", new Date()).endObject();
+//					}
+//					catch(Exception exception){
+//						System.out.println(exception.getMessage());
+//					}
+//					IndexRequest indexRequest = new IndexRequest();
+//					indexRequest.index(ElasticsearchHelper.indexName);
+//					indexRequest.type(ElasticsearchHelper.typeName);
+//					indexRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
+//					indexRequest.source(tempXContentBuilder);
+//					ActionFuture<IndexResponse> indexRequestActionFuture = client.index(indexRequest);
+//					IndexResponse indexResponse = indexRequestActionFuture.actionGet();
+//					
+////					UpdateRequest updateRequest = new UpdateRequest();
+////					updateRequest.index(ElasticsearchHelper.indexName);
+////					updateRequest.type(ElasticsearchHelper.typeName);
+////					updateRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
+////					updateRequest.doc(tempXContentBuilder);
+////					ActionFuture<UpdateResponse> updateResponseActionFuture = client.update(updateRequest);
+////					UpdateResponse updateResponse = updateResponseActionFuture.actionGet();
+//					
+////					GetRequest getRequest = new GetRequest();
+////					getRequest.index(ElasticsearchHelper.indexName);
+////					getRequest.type(ElasticsearchHelper.typeName);
+////					getRequest.id(String.valueOf(Thread.currentThread().getName()) + String.valueOf(i));
+////					getRequest.fields("user", "tags", "update_date");
+////					ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
+////					GetResponse getResponse = getResponseActionFuture.actionGet();
+//					
+////					SearchRequest searchRequest = new SearchRequest();
+////					searchRequest.indices(ElasticsearchHelper.indexName);
+////					searchRequest.types(ElasticsearchHelper.typeName);
+////					SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+////					searchSourceBuilder.query(QueryBuilders.termQuery("user", String.valueOf(Thread.currentThread().getName()) + String.valueOf(i)));
+////					searchRequest.source(searchSourceBuilder);
+////					ActionFuture<SearchResponse> searchResponseActionFuture = client.search(searchRequest);
+////					SearchResponse searchResponse = searchResponseActionFuture.actionGet();
+//				}
+//		    }, String.valueOf(j) + "_");
+//		}
+//		
+//		long begin = System.currentTimeMillis();
+//		for(int i = 0; i < length; i++){
+//			thread[i].start();
+//		}
+//		for(int i = 0; i < length; i++){
+//			thread[i].join();
+//		}
+//		System.out.println(System.currentTimeMillis() - begin);
 		
 //		IndexRequest indexRequest = new IndexRequest();
 //		indexRequest.index(ElasticsearchHelper.indexName);
@@ -152,15 +203,27 @@ public class ElasticsearchHelper {
 //		indexRequest.source(xContentBuilder);
 //		ActionFuture<IndexResponse> indexRequestActionFuture = client.index(indexRequest);
 //		IndexResponse indexResponse = indexRequestActionFuture.actionGet();
-//		
-//
+		
+		
+//	    IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+//	    indicesAliasesRequest.addAlias("fristAlias", ElasticsearchHelper.indexName);
+//	    indicesAliasesRequest.addAlias("secondAlias", ElasticsearchHelper.indexName);
+//	    indicesAliasesRequest.addAlias("thirdAlias", ElasticsearchHelper.indexName);
+//	    IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
+		
+//	    IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+//		indicesAliasesRequest.removeAlias(ElasticsearchHelper.indexName, "thirdAlias");
+//		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
+//	    System.out.println(indicesAliasesRequest.toString());
+		
 //		GetRequest getRequest = new GetRequest();
-//		getRequest.index(ElasticsearchHelper.indexName);
+//		getRequest.index(ElasticsearchHelper.aliasName); // ElasticsearchHelper.indexName
 //		getRequest.type(ElasticsearchHelper.typeName);
 //		getRequest.id("2");
 //		ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
 //		GetResponse getResponse = getResponseActionFuture.actionGet();
-//
+//		System.out.println(getResponse.getSourceAsString());
+
 //		UpdateRequest updateRequest = new UpdateRequest();
 //		updateRequest.index(ElasticsearchHelper.indexName);
 //		updateRequest.type(ElasticsearchHelper.typeName);
@@ -169,7 +232,7 @@ public class ElasticsearchHelper {
 //		updateRequest.doc(xContentBuilder);
 //		ActionFuture<UpdateResponse> updateResponseActionFuture = client.update(updateRequest);
 //		UpdateResponse updateResponse = updateResponseActionFuture.actionGet();
-
+	    
 //		SearchRequest searchRequest = new SearchRequest();
 //		searchRequest.indices(ElasticsearchHelper.indexName);
 //		searchRequest.types(ElasticsearchHelper.typeName);
