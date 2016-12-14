@@ -17,6 +17,7 @@
     <com.alibaba.version>1.2.21</com.alibaba.version>
     <spring-data-redis.verion>1.7.5.RELEASE</spring-data-redis.verion>
     <org.apache.httpcomponents.version>4.5.2</org.apache.httpcomponents.version>
+    <org.quartz-scheduler.version>2.2.1</org.quartz-scheduler.version>
   </properties>
   
   <dependencyManagement>
@@ -50,6 +51,11 @@
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>${org.apache.httpcomponents.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.quartz-scheduler</groupId>
+        <artifactId>quartz</artifactId>
+        <version>${org.quartz-scheduler.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

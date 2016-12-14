@@ -16,8 +16,11 @@ import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.count.CountRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -30,6 +33,8 @@ import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.metadata.AliasMetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -66,6 +71,19 @@ public class ElasticsearchHelper {
 		TransportClient client = TransportClient.builder().settings(settings).build();
 		client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ElasticsearchHelper.hostName), 9300));
 		
+//		GetAliasesRequest getAliasesRequest = new GetAliasesRequest();		
+//		GetAliasesResponse getAliasesResponse = client.admin().indices().getAliases(getAliasesRequest).actionGet();
+//		ImmutableOpenMap<String, List<AliasMetaData>> asd = getAliasesResponse.getAliases();
+//		List<AliasMetaData> aliasMetaDatum = asd.getOrDefault("newindex", null);
+//		for(AliasMetaData aliasMetaData : aliasMetaDatum){
+//			System.out.println(aliasMetaData.getAlias());
+//		}
+		
+		
+		
+//		CountRequest countRequest = new CountRequest();
+//		countRequest.
+//		client.count(request)
 		//client.inde
 
 		// SearchRequestBuilder builder =
@@ -107,13 +125,13 @@ public class ElasticsearchHelper {
 //		indicesAliasesRequest.addAlias("asdAlias", "newindex1");
 //		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 
-		GetRequest getRequest = new GetRequest();
-		getRequest.index("asdAlias"); // ElasticsearchHelper.indexName
-		getRequest.type(ElasticsearchHelper.typeName);
-		getRequest.id("4");
-		ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
-		GetResponse getResponse = getResponseActionFuture.actionGet();
-		System.out.println(getResponse.getSourceAsString());
+//		GetRequest getRequest = new GetRequest();
+//		getRequest.index("asdAlias"); // ElasticsearchHelper.indexName
+//		getRequest.type(ElasticsearchHelper.typeName);
+//		getRequest.id("4");
+//		ActionFuture<GetResponse> getResponseActionFuture = client.get(getRequest);
+//		GetResponse getResponse = getResponseActionFuture.actionGet();
+//		System.out.println(getResponse.getSourceAsString());
 	    
 //		BulkRequest bulkRequest = new BulkRequest();		
 //		for(int i = 0; i < 100000; i++){
@@ -215,6 +233,11 @@ public class ElasticsearchHelper {
 //		indicesAliasesRequest.removeAlias(ElasticsearchHelper.indexName, "thirdAlias");
 //		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 //	    System.out.println(indicesAliasesRequest.toString());
+		
+		IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+	    indicesAliasesRequest.addAlias("asdAlias", "newindex1");
+	    indicesAliasesRequest.removeAlias("newindex", "asdAlias");
+	    IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 		
 //		GetRequest getRequest = new GetRequest();
 //		getRequest.index(ElasticsearchHelper.aliasName); // ElasticsearchHelper.indexName
