@@ -13,6 +13,10 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		//ElasticsearchHelper.Test();
 		
+		//AnnotationUtils
+		//AopUtils just for spring
+		//ReflectionUtils
+		
 		String uuid = UUID.randomUUID().toString();
 		System.out.println(uuid);
 		

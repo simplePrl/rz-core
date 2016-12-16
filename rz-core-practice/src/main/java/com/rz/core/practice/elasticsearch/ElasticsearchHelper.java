@@ -6,18 +6,28 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.security.auth.message.callback.PrivateKeyCallback.AliasRequest;
 
+import org.apache.http.entity.ContentType;
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesResponse;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.count.CountRequest;
@@ -34,6 +44,7 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -41,11 +52,14 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.index.get.GetResult;
+import org.elasticsearch.index.mapper.MapperBuilders;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+
+import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 
 // Error: Alias [asdAlias] has more than one indices associated with it [[newindex, newindex1]], can't execute a single index op
 public class ElasticsearchHelper {
@@ -70,6 +84,55 @@ public class ElasticsearchHelper {
 		Settings settings = Settings.builder().put("cluster.name", ElasticsearchHelper.clusterName).build();
 		TransportClient client = TransportClient.builder().settings(settings).build();
 		client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ElasticsearchHelper.hostName), 9300));
+		
+		// get mapping
+		GetMappingsRequest getMappingsRequest = new GetMappingsRequest();
+		getMappingsRequest.indices(ElasticsearchHelper.indexName);
+		getMappingsRequest.types(ElasticsearchHelper.typeName);
+		GetMappingsResponse getMappingsResponse = client.admin().indices().getMappings(getMappingsRequest).actionGet();
+		//ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = getMappingsResponse.getMappings();
+		
+		GetIndexRequest getIndexRequest = new GetIndexRequest();
+		getIndexRequest.indices(ElasticsearchHelper.indexName);
+		//getIndexRequest.types(ElasticsearchHelper.typeName);
+		GetIndexResponse getIndexResponse = client.admin().indices().getIndex(getIndexRequest).actionGet();
+		ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = getIndexResponse.getMappings();
+		Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>>> aliasIterator = mappings.iterator();
+		while(aliasIterator.hasNext()){
+			ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>> aliasObjectObjectCursor = aliasIterator.next();
+			
+			System.out.println(aliasObjectObjectCursor.key);
+			
+			Iterator<ObjectObjectCursor<String, MappingMetaData>> mappingIterator = aliasObjectObjectCursor.value.iterator();
+			while(true == mappingIterator.hasNext()){
+				ObjectObjectCursor<String, MappingMetaData> mappingObjectObjectCursor = mappingIterator.next();
+				System.out.println("    " + mappingObjectObjectCursor.key + ": " + mappingObjectObjectCursor.value.source().toString());
+			}
+			
+//			for (AliasMetaData aliasMetaData : indexAliasesMap.value) {
+//				if (true == StringUtils.equalsIgnoreCase(alias, aliasMetaData.getAlias())) {
+//					if (null == indexName) {
+//						indexName = indexAliasesMap.key;
+//					} else {
+//						throw new Exception("There are two index(" + indexName + ") and (" + indexAliasesMap.key
+//								+ ") are map to alias(" + alias + ").");
+//					}
+//				}
+//			}
+		}
+		
+		// create index by mapping
+		CreateIndexRequest createIndexRequest = new CreateIndexRequest();
+		createIndexRequest.index("houhouindex");
+		//createIndexRequest.settings()??
+		createIndexRequest.mapping("default111", "{\"default111\":{\"properties\":{\"leader\":{\"type\":\"long\"},\"leaderType\":{\"type\":\"long\"},\"tags\":{\"type\":\"long\"},\"update_date\":{\"type\":\"date\",\"format\":\"strict_date_optional_time||epoch_millis\"}}}}");
+		CreateIndexResponse createIndexResponse = client.admin().indices().create(createIndexRequest).actionGet();
+		
+//		PutMappingRequest putMappingRequest = new PutMappingRequest();
+//		putMappingRequest.indices(new String[] {"houhouIndex"});
+//		putMappingRequest.type("default111");
+//		putMappingRequest.source("{'default111':{'properties':{'leader':{'type':'long'},'leaderType':{'type':'long'},'tags':{'type':'long'},'update_date':{'type':'date','format':'strict_date_optional_time||epoch_millis'}}}}");
+//		PutMappingResponse putMappingResponse = client.admin().indices().putMapping(putMappingRequest).actionGet();
 		
 //		GetAliasesRequest getAliasesRequest = new GetAliasesRequest();		
 //		GetAliasesResponse getAliasesResponse = client.admin().indices().getAliases(getAliasesRequest).actionGet();
@@ -97,7 +160,7 @@ public class ElasticsearchHelper {
 		// System.out.println(response.getHits().getTotalHits());
 
 		XContentBuilder xContentBuilder = null;
-		IndexResponse indexResponse = null;
+//		IndexResponse indexResponse = null;
 //		xContentBuilder = XContentFactory.jsonBuilder().startObject()
 //				.field("leader", 66666)
 //				.field("leaderType", 45)
@@ -234,10 +297,10 @@ public class ElasticsearchHelper {
 //		IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 //	    System.out.println(indicesAliasesRequest.toString());
 		
-		IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
-	    indicesAliasesRequest.addAlias("asdAlias", "newindex1");
-	    indicesAliasesRequest.removeAlias("newindex", "asdAlias");
-	    IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
+//		IndicesAliasesRequest indicesAliasesRequest = new IndicesAliasesRequest();
+//	    indicesAliasesRequest.addAlias("asdAlias", "newindex1");
+//	    indicesAliasesRequest.removeAlias("newindex", "asdAlias");
+//	    IndicesAliasesResponse indicesAliasesResponse = client.admin().indices().aliases(indicesAliasesRequest).actionGet();
 		
 //		GetRequest getRequest = new GetRequest();
 //		getRequest.index(ElasticsearchHelper.aliasName); // ElasticsearchHelper.indexName

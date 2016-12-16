@@ -18,6 +18,7 @@
     <spring-data-redis.verion>1.7.5.RELEASE</spring-data-redis.verion>
     <org.apache.httpcomponents.version>4.5.2</org.apache.httpcomponents.version>
     <org.quartz-scheduler.version>2.2.1</org.quartz-scheduler.version>
+    <cglib.version>2.2.2</cglib.version>
   </properties>
   
   <dependencyManagement>
@@ -56,6 +57,11 @@
         <groupId>org.quartz-scheduler</groupId>
         <artifactId>quartz</artifactId>
         <version>${org.quartz-scheduler.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>${cglib.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

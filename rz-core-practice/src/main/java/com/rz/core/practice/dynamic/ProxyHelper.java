@@ -3,11 +3,15 @@ package com.rz.core.practice.dynamic;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-public class DynamicHelper {
+import org.springframework.aop.support.AopUtils;
+
+public class ProxyHelper {
 
 	public static void main(String[] args) {
-		DynamicHelper dynamicHelper = new DynamicHelper();
-		dynamicHelper.testProxy1();
+		ProxyHelper proxyHelper = new ProxyHelper();
+		proxyHelper.testProxy1();
+		
+		System.out.println("ProxyHelper");
 	}
 
 	private void testProxy1() {
@@ -29,6 +33,8 @@ public class DynamicHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println(AopUtils.isAopProxy(workerProxy));
 		
 		System.out.println("worker: " + Proxy.isProxyClass(worker.getClass()) + "   " + "workerProxy: " + Proxy.isProxyClass(workerProxy.getClass()));
 	}

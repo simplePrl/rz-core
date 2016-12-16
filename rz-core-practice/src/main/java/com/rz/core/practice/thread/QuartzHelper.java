@@ -36,8 +36,7 @@ public class QuartzHelper {
 		SchedulerFactory schedulerFactory = new StdSchedulerFactory();
 		Scheduler scheduler = schedulerFactory.getScheduler();
 		
-//		ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10); 
-//		ScheduledFuture<?> scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(()->{}, 0, 2, TimeUnit.SECONDS);
+
 		
 		JobDetail jobDetail = JobBuilder.newJob(TestJob.class).withIdentity("worker1").build();
 		JobDetail jobDetailNew = JobBuilder.newJob(TestJob.class).withIdentity("worker2").build();
