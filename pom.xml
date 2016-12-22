@@ -19,10 +19,16 @@
     <org.apache.httpcomponents.version>4.5.2</org.apache.httpcomponents.version>
     <org.quartz-scheduler.version>2.2.1</org.quartz-scheduler.version>
     <cglib.version>2.2.2</cglib.version>
+    <rz-core.version>0.0.1-SNAPSHOT</rz-core.version>
   </properties>
   
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.rz.core</groupId>
+        <artifactId>rz-core-component</artifactId>
+        <version>${rz-core.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -68,5 +74,6 @@
   
   <modules>
   	<module>rz-core-practice</module>
+  	<module>rz-core-component</module>
   </modules>
 </project>
