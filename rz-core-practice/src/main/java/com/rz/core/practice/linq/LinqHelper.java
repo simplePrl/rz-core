@@ -20,7 +20,9 @@ public class LinqHelper {
 		// array to list
 		String[] values1 = new String[10];
 		List<String> values2 = Arrays.asList(values1);
-		
+		// array to list
+		values1 = values2.toArray(new String[values2.size()]);
+
 		List<MonitorDto> monitorDtos = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
 			MonitorDto monitorDto = new MonitorDto();
@@ -33,7 +35,7 @@ public class LinqHelper {
 
 		// filter
 		monitorDtos = monitorDtos.stream().filter(o -> MonitorDto.class == o.getClass()).collect(Collectors.toList());
-		
+
 		// any
 		System.out.println(monitorDtos.stream().findAny().isPresent());
 
@@ -47,12 +49,12 @@ public class LinqHelper {
 		MonitorDto monitorDto = new MonitorDto();
 		monitorDto.setAge(12222222);
 		monitorDto.setName("12222222");
-		// if null, than use  monitorDto
+		// if null, than use monitorDto
 		System.out.println(optionalMonitorDto.orElse(monitorDto).toString());
 		System.out.println(optionalMonitorDto.orElse(null));
 
 		// map
-		List<String> names = monitorDtos.stream().map(o->o.getName()).collect(Collectors.toList());
-	    System.out.println(names.toString());
+		List<String> names = monitorDtos.stream().map(o -> o.getName()).collect(Collectors.toList());
+		System.out.println(names.toString());
 	}
 }
