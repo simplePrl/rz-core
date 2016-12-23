@@ -15,6 +15,9 @@ public class DateTimeUtilsTest {
 
     private void test() {
         Date date = DateTimeUtils.getNow();
+        
+        this.show(DateTimeUtils.getMinDate());
+        this.show(DateTimeUtils.getMaxDate());
 
         this.show(date);
         this.show(DateTimeUtils.toYear(date));
@@ -46,6 +49,7 @@ public class DateTimeUtilsTest {
         System.out.println(DateTimeUtils.toString(date, DateTimeUtils.DATE_FORMAT3));
         System.out.println(DateTimeUtils.dayOfWeek(date));
         System.out.println(DateTimeUtils.dayOfYear(date));
+        System.out.println(date.getTime());
         System.out.println("--------------------------------------------");
     }
 }

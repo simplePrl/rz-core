@@ -7,8 +7,8 @@ import java.util.Date;
 public class DateTimeUtils {
 
     public final static String DATE_FORMAT1 = "yyyy-MM-dd";
-    public final static String DATE_FORMAT2 = "yyyy-MM-dd hh:mm:ss";
-    public final static String DATE_FORMAT3 = "yyyy-MM-dd hh:mm:ss SSS";
+    public final static String DATE_FORMAT2 = "yyyy-MM-dd HH:mm:ss";
+    public final static String DATE_FORMAT3 = "yyyy-MM-dd HH:mm:ss SSS";
 
     public static Date toDate(int year, int month, int day) {
         return DateTimeUtils.toDate(year, month, day, 0, 0, 0, 0);
@@ -48,6 +48,14 @@ public class DateTimeUtils {
         Date now = DateTimeUtils.getNow();
 
         return DateTimeUtils.toDate(DateTimeUtils.getYear(now), DateTimeUtils.getMonth(now), DateTimeUtils.getDay(now));
+    }
+    
+    public static Date getMinDate() {
+        return DateTimeUtils.toDate(1, 1, 1);
+    }
+
+    public static Date getMaxDate() {
+        return DateTimeUtils.toDate(9999, 12, 31, 23, 59, 59, 999);
     }
     
     public static double totalDays(Date date1, Date date2) {

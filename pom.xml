@@ -20,6 +20,8 @@
     <org.quartz-scheduler.version>2.2.1</org.quartz-scheduler.version>
     <cglib.version>2.2.2</cglib.version>
     <rz-core.version>0.0.1-SNAPSHOT</rz-core.version>
+    <org.apache.commons.version>3.5</org.apache.commons.version>
+    <org.aspectj.version>1.8.10</org.aspectj.version>
   </properties>
   
   <dependencyManagement>
@@ -68,6 +70,21 @@
         <groupId>cglib</groupId>
         <artifactId>cglib</artifactId>
         <version>${cglib.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${org.apache.commons.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${org.aspectj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>${org.aspectj.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
