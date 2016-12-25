@@ -1,7 +1,5 @@
 package com.rz.core;
 
-import java.util.List;
-
 public class RZHelper {
     public static boolean isBaseClazz(Class<?> clazz) {
         if (null == clazz) {
