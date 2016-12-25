@@ -10,12 +10,12 @@ import com.rz.core.practice.model.MonitorDto;
 
 public class JsonHelper {
 	public static void main(String[] args){
-		Test();
+		test();
 		
-		System.out.println("Start...");
+		System.out.println("End JsonHelper...");
 	}
 	
-	public static void Test(){
+	public static void test(){
 		MonitorDto monitorDto = new MonitorDto();
 		monitorDto.setAge(32222222);;
 		monitorDto.setName("22222222");
@@ -34,5 +34,7 @@ public class JsonHelper {
 		map.put("name", "value");
 		map.put("age", 20);
 		System.out.println(JSON.toJSONString(map));
+		
+		JSON.parseObject("asd");
 	} 
 }

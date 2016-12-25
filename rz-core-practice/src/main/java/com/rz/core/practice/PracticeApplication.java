@@ -35,8 +35,9 @@ import com.rz.core.utils.DateTimeUtils;
 // @Import({PracticeConfig.class})
 public class PracticeApplication {
 
+    
     public static void main(String[] args) throws Exception {
-
+        
         Integer tint1 = 25;
         Integer tint2 = tint1;
         tint2 = 26;

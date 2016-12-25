@@ -22,6 +22,9 @@
     <rz-core.version>0.0.1-SNAPSHOT</rz-core.version>
     <org.apache.commons.version>3.5</org.apache.commons.version>
     <org.aspectj.version>1.8.10</org.aspectj.version>
+    <org.apache.zookeeper.version>3.4.9</org.apache.zookeeper.version>
+    <com.rabbitmq.version>4.0.0</com.rabbitmq.version>
+    <org.mongodb.version>3.4.1</org.mongodb.version>
   </properties>
   
   <dependencyManagement>
@@ -85,6 +88,21 @@
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
         <version>${org.aspectj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${org.apache.zookeeper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.rabbitmq</groupId>
+        <artifactId>amqp-client</artifactId>
+        <version>${com.rabbitmq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>${org.mongodb.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
