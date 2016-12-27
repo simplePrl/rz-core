@@ -1,5 +1,7 @@
 package com.rz.core.practice.model;
 
+import java.io.Serializable;
+
 //import lombok.Data;
 
 //A a = new A();
@@ -10,7 +12,9 @@ package com.rz.core.practice.model;
 // A <-> B has loop reference issue, if use @Data
 
 //@Data
-public class A {
+public class A implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private B b;
 
     public void setB(B b) {

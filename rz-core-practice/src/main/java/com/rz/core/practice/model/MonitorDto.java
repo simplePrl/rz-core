@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class MonitorDto extends DtoBase {
-	@TagAnnotation(value = "TagAnnotation")
+    private static final long serialVersionUID = 1L;
+    
+    @TagAnnotation(value = "TagAnnotation")
 	private String name;
 	private int age;
 	private MapDto map;

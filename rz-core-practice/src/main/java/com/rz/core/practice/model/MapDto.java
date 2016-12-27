@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class MapDto extends DtoBase {
-	private String englishName;
+    private static final long serialVersionUID = 1L;
+    
+    private String englishName;
 	private boolean result;
 }

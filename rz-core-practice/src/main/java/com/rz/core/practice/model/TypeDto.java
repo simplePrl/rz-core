@@ -1,5 +1,6 @@
 package com.rz.core.practice.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.Map;
 import lombok.Data;
 
 @Data
-public class TypeDto {
+public class TypeDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String tString;
     private int tint;
     private Integer tInteger;

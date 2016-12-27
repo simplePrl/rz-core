@@ -1,6 +1,10 @@
 package com.rz.core.practice.model;
 
-public class GenericDto<T extends DtoBase> {
+import java.io.Serializable;
+
+public class GenericDto<T extends DtoBase> implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
 	private T _monitor;
 
 	public T getMonitor() {
