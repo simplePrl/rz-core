@@ -38,10 +38,10 @@ public class PracticeApplication {
     
     public static void main(String[] args) throws Exception {
         
-        Integer tint1 = 25;
-        Integer tint2 = tint1;
-        tint2 = 26;
-        System.out.println("Integer: " + tint1.equals(tint2));
+//        Integer tint1 = 25;
+//        Integer tint2 = tint1;
+//        tint2 = 26;
+//        System.out.println("Integer: " + tint1.equals(tint2));
         //
         // Date tdate1 = new Date();
         // Date tdate2 = tdate1;
@@ -55,8 +55,8 @@ public class PracticeApplication {
 //        a.hashCode();
 //        b.hashCode();
 //        System.out.println(a.equals(b));
-
-        TypeDto typeDto = TypeDto.build();
+//
+//        TypeDto typeDto = TypeDto.build();
         // TypeDto typeDto2 = typeDto1;
         // TypeDto.change(typeDto2);
         //
@@ -116,10 +116,10 @@ public class PracticeApplication {
         // }
         //
         // System.out.println(newValues.length);
-        TypeDto newTypeDto = CloneMachine.clone(typeDto);
-        TypeDto.change(newTypeDto);
-        System.out.println("newTypeDto: " + newTypeDto);
-        System.out.println("typeDto: " + typeDto);
+//        TypeDto newTypeDto = CloneMachine.clone(typeDto);
+//        TypeDto.change(newTypeDto);
+//        System.out.println("newTypeDto: " + newTypeDto);
+//        System.out.println("typeDto: " + typeDto);
 
         // System.out.println(DateTimeUtils.addYear(null, 100));
 
@@ -139,7 +139,7 @@ public class PracticeApplication {
         // String[] flagSplit = "ssss,2222,4444,dddd".split(",");
         // System.out.println(flagSplit[2]);
 
-        // SpringApplication.run(PracticeApplication.class, args);
+        SpringApplication.run(PracticeApplication.class, args);
 
         // System.out.println("End Application...");
         // ApplicationContext applicationContext = new
@@ -155,8 +155,6 @@ public class PracticeApplication {
         //// System.out.println(null == worker);
         //
         // aspectWork.run(111);
-
-        System.out.println();
     }
 
 }

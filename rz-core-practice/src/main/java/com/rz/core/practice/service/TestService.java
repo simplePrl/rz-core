@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService implements ITestService {
 
-	@Resource
-	private Client elasticsearchClient;
+//	@Resource
+//	private Client elasticsearchClient;
 
 	@Override
 	public String Test(String value) {
-		if(null == this.elasticsearchClient){
-			return "null";
-		}
-		else{
-			return this.elasticsearchClient.settings().toString();
-		}
+	    return "";
+//		if(null == this.elasticsearchClient){http://localhost:8080/hello/abc
+//			return "null";testService
+//		}
+//		else{
+//			return this.elasticsearchClient.settings().toString();
+//		}
 	}
 }
