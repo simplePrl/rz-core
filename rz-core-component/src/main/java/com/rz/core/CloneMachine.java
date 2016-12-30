@@ -3,7 +3,9 @@ package com.rz.core;
 import java.util.List;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,9 +76,9 @@ public class CloneMachine {
                 }
                 Array.set(newInstance, i, newItem);
             }
-        } else if (instance instanceof List) {
-            List list = (List) instance;
-            for (Object item : list) {
+        } else if (instance instanceof Collection) {
+            Collection collection = (Collection) instance;
+            for (Object item : collection) {
                 Object newItem = item;
                 try {
                     newItem = CloneMachine.clone(item, instanceRecords, ignoreException);
@@ -87,11 +89,10 @@ public class CloneMachine {
                         throw e;
                     }
                 }
-                ((List) newInstance).add(newItem);
+                ((Collection) newInstance).add(newItem);
             }
         } else if (instance instanceof Map) {
             Map map = (Map) instance;
-
             for (Object item : map.entrySet()) {
                 Map.Entry entiy = (Map.Entry) item;
 
@@ -129,10 +130,13 @@ public class CloneMachine {
             }
             fields = CloneMachine.fields.get(clazz);
             for (Field field : fields) {
-                field.setAccessible(true);
-
+                if (true == Modifier.isFinal(field.getModifiers()) || true == Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
                 // TODO Annotation check
                 // Annotation[] annotations= field.getAnnotations();
+
+                field.setAccessible(true);
 
                 Object fieldValue = field.get(instance);
                 Object newFieldValue = fieldValue;

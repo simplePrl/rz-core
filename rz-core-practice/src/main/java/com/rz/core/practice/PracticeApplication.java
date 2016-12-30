@@ -38,6 +38,8 @@ public class PracticeApplication {
     
     public static void main(String[] args) throws Exception {
         
+        testClone();
+        
 //        Integer tint1 = 25;
 //        Integer tint2 = tint1;
 //        tint2 = 26;
@@ -56,7 +58,7 @@ public class PracticeApplication {
 //        b.hashCode();
 //        System.out.println(a.equals(b));
 //
-//        TypeDto typeDto = TypeDto.build();
+//        
         // TypeDto typeDto2 = typeDto1;
         // TypeDto.change(typeDto2);
         //
@@ -116,10 +118,7 @@ public class PracticeApplication {
         // }
         //
         // System.out.println(newValues.length);
-//        TypeDto newTypeDto = CloneMachine.clone(typeDto);
-//        TypeDto.change(newTypeDto);
-//        System.out.println("newTypeDto: " + newTypeDto);
-//        System.out.println("typeDto: " + typeDto);
+
 
         // System.out.println(DateTimeUtils.addYear(null, 100));
 
@@ -157,4 +156,11 @@ public class PracticeApplication {
         // aspectWork.run(111);
     }
 
+    private static void testClone() throws Exception{
+        TypeDto typeDto = TypeDto.build();
+        TypeDto newTypeDto = CloneMachine.clone(typeDto);
+        TypeDto.change(newTypeDto);
+        System.out.println("newTypeDto: " + newTypeDto);
+        System.out.println("typeDto   : " + typeDto);
+    }
 }

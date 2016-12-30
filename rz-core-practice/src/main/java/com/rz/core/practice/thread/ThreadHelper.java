@@ -87,7 +87,7 @@ public class ThreadHelper {
 		Thread thread = new Thread(() -> {
 			while(true){
 				try {
-					semaphore.acquire(2);
+					semaphore.acquire(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
