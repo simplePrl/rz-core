@@ -1,5 +1,8 @@
 package com.rz.core;
 
+import java.util.Collection;
+import java.util.Map;
+
 public class RZHelper {
     public static boolean isBaseClazz(Class<?> clazz) {
         if (null == clazz) {
@@ -27,5 +30,21 @@ public class RZHelper {
         }
 
         return false;
+    }
+    
+    public static boolean isEmptyCollection(Collection<?> collection){
+        if(null == collection || true == collection.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public static boolean isEmptyCollection(Map<?, ?> map){
+        if(null == map || true == map.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

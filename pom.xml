@@ -20,7 +20,8 @@
     <org.quartz-scheduler.version>2.2.1</org.quartz-scheduler.version>
     <cglib.version>2.2.2</cglib.version>
     <rz-core.version>0.0.1-SNAPSHOT</rz-core.version>
-    <org.apache.commons.version>3.5</org.apache.commons.version>
+    <org.apache.commons.lang3.version>3.5</org.apache.commons.lang3.version>
+    <org.apache.commons.collections4.version>4.0</org.apache.commons.collections4.version>
     <org.aspectj.version>1.8.10</org.aspectj.version>
     <org.apache.zookeeper.version>3.4.9</org.apache.zookeeper.version>
     <com.rabbitmq.version>4.0.0</com.rabbitmq.version>
@@ -77,7 +78,12 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>${org.apache.commons.version}</version>
+        <version>${org.apache.commons.lang3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${org.apache.commons.collections4.version}</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
