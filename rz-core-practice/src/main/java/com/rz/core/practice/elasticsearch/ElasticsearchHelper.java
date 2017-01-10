@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -67,10 +70,11 @@ import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 // Error: Alias [asdAlias] has more than one indices associated with it [[newindex, newindex1]], can't execute a single index op
 public class ElasticsearchHelper {
 	private static String clusterName = "elasticsearch";
-	private static String hostName = "192.168.127.138";//"192.168.36.214";//
-	private static String indexName = "usertags";//"crm";//
-	private static String aliasName = "fristAlias";
-	private static String typeName = "default";
+	private static String hostName = "192.168.36.161";//"192.168.127.138";//"192.168.36.214";//
+	private static int port = 10293;
+	private static String indexName = "portal_0000000";//"crm";//
+	private static String aliasName = "portal";
+	private static String typeName = "article";
 	
 	public static void main(String[] args){
 		try {
@@ -86,7 +90,7 @@ public class ElasticsearchHelper {
 	public static void Test() throws Exception {
 		Settings settings = Settings.builder().put("cluster.name", ElasticsearchHelper.clusterName).build();
 		TransportClient client = TransportClient.builder().settings(settings).build();
-		client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ElasticsearchHelper.hostName), 9300));
+		client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ElasticsearchHelper.hostName), ElasticsearchHelper.port));
 		
 //		// get mapping
 //		GetMappingsRequest getMappingsRequest = new GetMappingsRequest();
@@ -99,11 +103,27 @@ public class ElasticsearchHelper {
 		getIndexRequest.indices(ElasticsearchHelper.indexName);
 		//getIndexRequest.types(ElasticsearchHelper.typeName);
 		GetIndexResponse getIndexResponse = client.admin().indices().getIndex(getIndexRequest).actionGet();
-		ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = getIndexResponse.getMappings();
-		Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>>> aliasIterator = mappings.iterator();
+		ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = getIndexResponse.getMappings();		
 		for (ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>> objectObjectCursor : mappings) {
 			
 		}
+		
+		// get settings
+		GetSettingsRequest req = new GetSettingsRequest().indices(ElasticsearchHelper.indexName);
+        GetSettingsResponse resp = client.admin().indices().getSettings(req).actionGet();
+        ImmutableOpenMap<String, Settings> indexSettings = resp.getIndexToSettings();
+        
+		Map<String, String> map = null;
+		//ImmutableOpenMap<String, Settings> indexSettings = getIndexResponse.getSettings();
+        for (ObjectObjectCursor<String, Settings> objectObjectCursor : indexSettings) {
+            System.out.println(objectObjectCursor.key + "---------------------");
+            map = objectObjectCursor.value.getAsMap();
+            for (Map.Entry<String, String> setting : map.entrySet()) {
+                System.out.println(setting.getKey() + ": " + setting.getValue());
+            }
+        }
+		
+		Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>>> aliasIterator = mappings.iterator();
 //		while(aliasIterator.hasNext()){
 //			ObjectObjectCursor<String, ImmutableOpenMap<String, MappingMetaData>> aliasObjectObjectCursor = aliasIterator.next();
 //			
@@ -128,10 +148,12 @@ public class ElasticsearchHelper {
 //		}
 		
 		// create index by mapping
-//		CreateIndexRequest createIndexRequest = new CreateIndexRequest();
-//		createIndexRequest.index("testindex");
-//		createIndexRequest.mapping("article", "{\"article\": {\"dynamic\": \"strict\",\"_all\": {\"enabled\": false},\"properties\": {\"title\": {\"type\": \"string\"},\"pubDate\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"},\"content\": {\"type\": \"string\"},\"dateAdded\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"},\"lastUpdateTime\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"}}}}");
-//		CreateIndexResponse createIndexResponse = client.admin().indices().create(createIndexRequest).actionGet();
+		CreateIndexRequest createIndexRequest = new CreateIndexRequest();
+		createIndexRequest.index("testindex");
+		map.put("index.refresh_interval", "-1");
+		createIndexRequest.settings(map);
+		//createIndexRequest.mapping("article", "{\"article\": {\"dynamic\": \"strict\",\"_all\": {\"enabled\": false},\"properties\": {\"title\": {\"type\": \"string\"},\"pubDate\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"},\"content\": {\"type\": \"string\"},\"dateAdded\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"},\"lastUpdateTime\": {\"format\": \"strict_date_optional_time||epoch_millis\",\"type\": \"date\"}}}}");
+		CreateIndexResponse createIndexResponse = client.admin().indices().create(createIndexRequest).actionGet();
 		
 //		PutMappingRequest putMappingRequest = new PutMappingRequest();
 //		putMappingRequest.indices(new String[] {"houhouIndex"});
@@ -221,14 +243,14 @@ public class ElasticsearchHelper {
 //		BulkResponse bulkResponse = bulkResponseActionFuture.actionGet();
 //		System.out.println(System.currentTimeMillis() - begin);
 		
-		BulkRequestBuilder bulk = client.prepareBulk();
-        IndexRequestBuilder irb = client.prepareIndex("testindex_new", "article", "697362");
-        //irb.setSource("{\"_id\":\"697362\",\"autoId\":697362,\"content\":\"\",\"dateAdded\":\"2012-07-11T21:52:20+0800\",\"lastUpdateTime\":\"2012-07-11T21:52:20+0800\",\"pubDate\":\"2014-09-19T21:50:35+0800\",\"title\":\"自荐书的英文怎么说\"}");
-        irb.setSource("{\"content\":\"\",\"dateAdded\":\"2012-07-11T21:52:20+0800\",\"lastUpdateTime\":\"2012-07-11T21:52:20+0800\",\"pubDate\":\"2014-09-19T21:50:35+0800\",\"title\":\"自荐书的英文怎么说\"}");
-        bulk.add(irb);
-        BulkResponse bulkResponse = bulk.execute().actionGet();
-        System.out.println(bulkResponse.hasFailures());
-        System.out.println(bulkResponse.buildFailureMessage());
+//		BulkRequestBuilder bulk = client.prepareBulk();
+//        IndexRequestBuilder irb = client.prepareIndex("testindex_new", "article", "697362");
+//        //irb.setSource("{\"_id\":\"697362\",\"autoId\":697362,\"content\":\"\",\"dateAdded\":\"2012-07-11T21:52:20+0800\",\"lastUpdateTime\":\"2012-07-11T21:52:20+0800\",\"pubDate\":\"2014-09-19T21:50:35+0800\",\"title\":\"自荐书的英文怎么说\"}");
+//        irb.setSource("{\"content\":\"\",\"dateAdded\":\"2012-07-11T21:52:20+0800\",\"lastUpdateTime\":\"2012-07-11T21:52:20+0800\",\"pubDate\":\"2014-09-19T21:50:35+0800\",\"title\":\"自荐书的英文怎么说\"}");
+//        bulk.add(irb);
+//        BulkResponse bulkResponse = bulk.execute().actionGet();
+//        System.out.println(bulkResponse.hasFailures());
+//        System.out.println(bulkResponse.buildFailureMessage());
         
 
 //		int length = 100;
