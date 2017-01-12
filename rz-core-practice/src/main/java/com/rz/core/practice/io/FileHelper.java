@@ -6,8 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.util.StreamUtils;
 
 public class FileHelper {
     public static void main(String[] args) {
@@ -30,6 +34,7 @@ public class FileHelper {
                     this.show1(file);
                     this.show2(file);
                     this.show3(file);
+                    this.show4(file);
                 }
             }
         }
@@ -47,33 +52,45 @@ public class FileHelper {
     }
 
     private void show2(File file) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        int oneChar = 0;
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
-            while ((oneChar = inputStreamReader.read()) != -1) {
-                if (((char) oneChar) != '\r') {
-                    System.out.print((char) oneChar);
+        int bytesRead = 0;
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            while ((bytesRead = inputStreamReader.read()) != -1) {
+                if (((char) bytesRead) != '\r') {
+                    System.out.print((char) bytesRead);
                 }
             }
         }
     }
 
     private void show3(File file) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
-            char[] chars = new char[30];
-            int oneChar = 0;
-            while ((oneChar = inputStreamReader.read(chars)) != -1) {
-                if ((oneChar == chars.length) && (chars[chars.length - 1] != '\r')) {
-                    System.out.print(chars);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            char[] buffer = new char[4096];
+            int bytesRead = 0;
+            while ((bytesRead = inputStreamReader.read(buffer)) != -1) {
+                if ((bytesRead == buffer.length) && (buffer[buffer.length - 1] != '\r')) {
+                    System.out.print(buffer);
                 } else {
-                    for (int i = 0; i < oneChar; i++) {
-                        if (chars[i] == '\r') {
+                    for (int i = 0; i < bytesRead; i++) {
+                        if (buffer[i] == '\r') {
                             continue;
                         } else {
-                            System.out.print(chars[i]);
+                            System.out.print(buffer[i]);
                         }
                     }
                 }
             }
         }
     }
+    
+    private void show4(File file) throws FileNotFoundException, IOException{
+        try (InputStream fileInputStream = new FileInputStream(file)) {
+            System.out.println(StreamUtils.copyToString(fileInputStream, StandardCharsets.UTF_8));
+        }
+    }
+    
+//    private void show5(File file) throws FileNotFoundException, IOException{
+//        try (InputStream fileInputStream = new FileInputStream(file)) {
+//            System.out.println(FileUtils.copyToString(file, StandardCharsets.UTF_8));
+//        }
+//    }
 }

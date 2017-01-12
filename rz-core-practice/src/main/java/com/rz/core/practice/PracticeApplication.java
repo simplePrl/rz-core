@@ -20,12 +20,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import com.rz.core.CloneMachine;
+import com.rz.core.RZHelper;
 import com.rz.core.practice.config.PracticeConfig;
 import com.rz.core.practice.dynamic.AspectWork;
 import com.rz.core.practice.dynamic.Worker;
 import com.rz.core.practice.model.A;
 import com.rz.core.practice.model.B;
 import com.rz.core.practice.model.TypeDto;
+import com.rz.core.practice.util.AppShutdownHandler;
 import com.rz.core.utils.DateTimeUtils;
 
 @SpringBootApplication
@@ -37,8 +39,9 @@ public class PracticeApplication {
 
     
     public static void main(String[] args) throws Exception {
+        testAppshutdown();
         
-        testClone();
+        //testClone();
         
 //        Integer tint1 = 25;
 //        Integer tint2 = tint1;
@@ -138,7 +141,7 @@ public class PracticeApplication {
         // String[] flagSplit = "ssss,2222,4444,dddd".split(",");
         // System.out.println(flagSplit[2]);
 
-        SpringApplication.run(PracticeApplication.class, args);
+        //SpringApplication.run(PracticeApplication.class, args);
 
         // System.out.println("End Application...");
         // ApplicationContext applicationContext = new
@@ -162,5 +165,9 @@ public class PracticeApplication {
         TypeDto.change(newTypeDto);
         System.out.println("newTypeDto: " + newTypeDto);
         System.out.println("typeDto   : " + typeDto);
+    }
+    
+    private static void testAppshutdown(){
+        AppShutdownHandler.addDefaultHandler();
     }
 }

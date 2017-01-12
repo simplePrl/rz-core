@@ -3,6 +3,7 @@ package com.rz.core.practice.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,19 @@ import com.rz.core.practice.model.MonitorDto;
 import com.rz.core.practice.model.TagAnnotation;
 
 public class Helper {
-	public static void reflectTest() throws Exception {
+    public static void main(String[] args){
+        Helper helper = new Helper();
+        
+        try {
+            helper.testClassLoader();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("End Helper");
+    }
+    
+	private void reflectTest() throws Exception {
 		MonitorDto monitorDto = new MonitorDto();
 		monitorDto.setName("adasdasd");
 		// System.out.println(monitorDto.getName());
@@ -60,12 +73,12 @@ public class Helper {
 		System.out.println(monitorDto.getName());
 	}
 
-	public static void throwException() throws Exception {
+	private void throwException() throws Exception {
 		Thread.sleep(1000);
 		throw new Exception("aasdasd");
 	}
 
-	public static void lambdaTest(Function<String, Integer> callBack) {
+	private void lambdaTest(Function<String, Integer> callBack) {
 		List<String> list1 = Collections.synchronizedList(new ArrayList<String>());
 		List<String> list2 = new ArrayList<String>();
 		Map<String, Integer> map1 = new ConcurrentHashMap<String, Integer>();
@@ -115,7 +128,7 @@ public class Helper {
 		System.out.println("monitorDtos size: " + monitorDtos.size());
 	}
 
-	public static Object convertTest(Class<?> classType, String value) throws Exception {
+	private Object convertTest(Class<?> classType, String value) throws Exception {
 		if (null == classType) {
 			throw new Exception("classType");
 		}
@@ -158,7 +171,7 @@ public class Helper {
 		}
 	}
 
-	public static void threadTest() {
+	private void threadTest() {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		service.submit(() -> {
 
@@ -169,7 +182,7 @@ public class Helper {
 		}).start();
 	}
 
-	public static <T extends Enum<T>> T getEnumFromString(Class<T> classType, String value) {
+	private <T extends Enum<T>> T getEnumFromString(Class<T> classType, String value) {
 		if (null != classType && null != value) {
 			try {
 				return Enum.valueOf(classType, value.trim().toUpperCase());
@@ -179,4 +192,28 @@ public class Helper {
 		}
 		return null;
 	}
+	
+    
+    // full access
+	public void testPublicScope(){
+        System.out.println("public");
+    }
+    
+    // access for same and sub package path
+    void testNothingScope(){
+        System.out.println("nothing");
+    }
+    
+    private ClassLoader testClassLoader() throws ClassNotFoundException{
+        //return ClassUtils.getDefaultClassLoader();
+        
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL url = classLoader.getResource(".");
+        System.out.println(url);
+        
+        Class<?> clazz = classLoader.loadClass("com.rz.core.practice.io.FileHelper");
+        System.out.println(clazz.toString());
+        
+        return classLoader;
+    }
 }
