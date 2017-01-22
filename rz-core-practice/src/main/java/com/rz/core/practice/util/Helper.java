@@ -1,5 +1,7 @@
 package com.rz.core.practice.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -21,6 +23,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
 
 import com.rz.core.practice.model.MonitorDto;
 import com.rz.core.practice.model.TagAnnotation;
@@ -204,15 +209,19 @@ public class Helper {
         System.out.println("nothing");
     }
     
-    private ClassLoader testClassLoader() throws ClassNotFoundException{
+    private ClassLoader testClassLoader() throws ClassNotFoundException, IOException{
         //return ClassUtils.getDefaultClassLoader();
         
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(".");
-        System.out.println(url);
+        URL configUrl = classLoader.getResource("config/");
+        File directory = new File(configUrl.getFile());
+        System.out.println(url + "    " + StringUtils.join(directory.listFiles()));
         
         Class<?> clazz = classLoader.loadClass("com.rz.core.practice.io.FileHelper");
         System.out.println(clazz.toString());
+        
+        //classLoader.getFile("/config/");
         
         return classLoader;
     }
