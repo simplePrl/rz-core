@@ -1,4 +1,4 @@
-package com.rz.core;
+package com.rz.core.httpcomponent;
 
 public enum HttpDecompressionMethods {
     None,

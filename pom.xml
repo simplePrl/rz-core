@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -26,8 +27,10 @@
     <org.apache.zookeeper.version>3.4.9</org.apache.zookeeper.version>
     <com.rabbitmq.version>4.0.0</com.rabbitmq.version>
     <org.mongodb.version>3.4.1</org.mongodb.version>
+    <org.apache.logging.log4j.version>2.7</org.apache.logging.log4j.version>
+    <org.slf4j-api.version>1.7.22</org.slf4j-api.version>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -110,11 +113,31 @@
         <artifactId>mongo-java-driver</artifactId>
         <version>${org.mongodb.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${org.apache.logging.log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${org.apache.logging.log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${org.apache.logging.log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${org.slf4j-api.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <modules>
-  	<module>rz-core-practice</module>
-  	<module>rz-core-component</module>
+    <module>rz-core-practice</module>
+    <module>rz-core-component</module>
   </modules>
 </project>

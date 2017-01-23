@@ -25,17 +25,22 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.io.ClassPathResource;
+import org.slf4j.MDC;
 
 import com.rz.core.practice.model.MonitorDto;
 import com.rz.core.practice.model.TagAnnotation;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Helper {
     public static void main(String[] args){
+        
         Helper helper = new Helper();
         
         try {
-            helper.testClassLoader();
+            //helper.testClassLoader();
+            helper.testLog();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,5 +229,17 @@ public class Helper {
         //classLoader.getFile("/config/");
         
         return classLoader;
+    }
+    
+    //private static org.apache.logging.log4j.Logger log = LogManager.getLogger(Helper.class);
+    private void testLog(){
+        MDC.put("requestId", "requestid1111");
+        MDC.put("serverIp", "serverIp1111");
+
+        for (int i = 0; i < 100; i++) {
+            log.error("asdasdasdasd");
+        }
+        
+        MDC.clear();
     }
 }

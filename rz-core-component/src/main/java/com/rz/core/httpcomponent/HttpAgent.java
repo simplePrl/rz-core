@@ -1,6 +1,7 @@
-package com.rz.core;
+package com.rz.core.httpcomponent;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
+import com.rz.core.Assert;
+import com.rz.core.RZHelper;
+
 // CaseInsensitiveMap
-public class HttpAgent {
+public class HttpAgent implements IHttpAgent {
     private final static int TIMEOUT = 30 * 1000;
     private List<String> baseUris;
     private int timeout;
@@ -37,10 +41,11 @@ public class HttpAgent {
     private String currentBaseUri;
 
     public HttpAgent() {
-        this(null, HttpAgent.TIMEOUT, null, HttpDecompressionMethods.Both, "application/json", "UTF-8", "application/json;charset=utf-8");
+        this(null, HttpAgent.TIMEOUT, null, HttpDecompressionMethods.Both, "application/json", StandardCharsets.UTF_8.name(), "application/json;charset=utf-8");
     }
 
-    public HttpAgent(List<String> baseUris, int timeout, Map<String, String> headers, HttpDecompressionMethods httpDecompressionMethods, String contentMimeType, String contentCharset, String acceptContentType) {
+    public HttpAgent(List<String> baseUris, int timeout, Map<String, String> headers, HttpDecompressionMethods httpDecompressionMethods, String contentMimeType, String contentCharset,
+            String acceptContentType) {
         this.baseUris = new ArrayList<>();
         if (false == RZHelper.isEmptyCollection(baseUris)) {
             for (String baseUri : baseUris) {
@@ -74,7 +79,7 @@ public class HttpAgent {
         this.headers.add(new BasicHeader("Connection", "Keep-Alive"));
         this.headers.add(new BasicHeader("Accept", this.acceptContentType));
     }
-    
+
     public String get(String uri) throws IOException {
         return this.get(uri, null);
     }
@@ -82,27 +87,27 @@ public class HttpAgent {
     public String get(String uri, Map<String, String> headers) throws IOException {
         return this.sendRequest("Get", uri, "", headers);
     }
-    
+
     public String delete(String uri) throws IOException {
         return this.delete(uri, null);
     }
-    
+
     public String delete(String uri, Map<String, String> headers) throws IOException {
         return this.sendRequest("Delete", uri, "", headers);
     }
-    
+
     public String post(String uri, String body) throws IOException {
         return this.post(uri, body, null);
     }
-    
+
     public String post(String uri, String body, Map<String, String> headers) throws IOException {
         return this.sendRequest("Post", uri, body, headers);
     }
-    
+
     public String put(String uri, String body) throws IOException {
         return this.put(uri, body, null);
     }
-    
+
     public String put(String uri, String body, Map<String, String> headers) throws IOException {
         return this.sendRequest("Put", uri, body, headers);
     }
