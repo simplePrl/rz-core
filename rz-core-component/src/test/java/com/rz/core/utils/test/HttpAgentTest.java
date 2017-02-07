@@ -6,14 +6,14 @@ import java.util.Arrays;
 import org.slf4j.MDC;
 
 import com.rz.core.httpcomponent.HttpAgent;
+import com.rz.core.httpcomponent.HttpAgentImpl;
 import com.rz.core.httpcomponent.HttpDecompressionMethods;
-import com.rz.core.httpcomponent.IHttpAgent;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HttpAgentTest {
-    private static IHttpAgent httpAgent = new HttpAgent(Arrays.asList(
+    private static HttpAgent httpAgent = new HttpAgentImpl(Arrays.asList(
             // "http://localhost:5000"
             // "http://localhost/YesHJ.NotifyCenter.WebHost"
             "http://qa.notify-center-base.intra.yeshj.com"
@@ -45,7 +45,6 @@ public class HttpAgentTest {
         
         MDC.clear();
         
-        //httpAgent.
         //httpAgent.delete(uri)
         // httpAgent.get(uri)
     }

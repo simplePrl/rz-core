@@ -28,7 +28,7 @@ public class CloneMachine {
         }
 
         // not allow loop reference the same instance
-        // throw StackOverflowError when invoke .hashCode() with by instance
+        // throw StackOverflowError when invoke .hashCode() with by instance that use @Data
         // that has loop reference
         if (true == instanceRecords.stream().filter(o -> true == instance.equals(o)).findAny().isPresent()) {
             return instance;
