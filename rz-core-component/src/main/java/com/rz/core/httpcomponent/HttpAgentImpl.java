@@ -44,7 +44,13 @@ public class HttpAgentImpl implements HttpAgent {
         this(null, HttpAgentImpl.TIMEOUT, null, HttpDecompressionMethods.Both, "application/json", StandardCharsets.UTF_8.name(), "application/json;charset=utf-8");
     }
 
-    public HttpAgentImpl(List<String> baseUris, int timeout, Map<String, String> headers, HttpDecompressionMethods httpDecompressionMethods, String contentMimeType, String contentCharset,
+    public HttpAgentImpl(
+            List<String> baseUris,
+            int timeout,
+            Map<String, String> headers,
+            HttpDecompressionMethods httpDecompressionMethods,
+            String contentMimeType,
+            String contentCharset,
             String acceptContentType) {
         this.baseUris = new ArrayList<>();
         if (false == RZHelper.isEmptyCollection(baseUris)) {
