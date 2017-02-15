@@ -400,7 +400,7 @@ public class ElasticsearchHelper {
 		// field.getValue().getValue());
 		// }
 		// }
-	}
+	//}
 
 	// private static ExecutorService exector =
 	// ThreadPool.newFixedThreadPool("multi-ds-execute", 1000, 100000);
@@ -544,4 +544,5 @@ public class ElasticsearchHelper {
 	// System.out.println(hit1.getSource().toString());
 	// }
 	// }
+	}
 }

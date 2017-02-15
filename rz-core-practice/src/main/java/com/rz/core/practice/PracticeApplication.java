@@ -1,34 +1,14 @@
 package com.rz.core.practice;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 import com.rz.core.CloneMachine;
-import com.rz.core.RZHelper;
-import com.rz.core.practice.config.PracticeConfig;
-import com.rz.core.practice.dynamic.AspectWork;
-import com.rz.core.practice.dynamic.Worker;
-import com.rz.core.practice.model.A;
-import com.rz.core.practice.model.B;
 import com.rz.core.practice.model.TypeDto;
 import com.rz.core.practice.util.AppShutdownHandler;
-import com.rz.core.utils.DateTimeUtils;
 
 @SpringBootApplication
 // @ComponentScan({ "com.hujiang.basic.framework.rest",
@@ -37,36 +17,54 @@ import com.rz.core.utils.DateTimeUtils;
 // @Import({PracticeConfig.class})
 public class PracticeApplication {
 
-    
+    private volatile int x;
+    private int y;
+
+    private AtomicInteger z;
+
+    public synchronized void addY(int value) {
+        y = value;
+        y++;
+    }
+
+    public void addZ() {
+        int result = z.incrementAndGet();
+    }
+
     public static void main(String[] args) throws Exception {
         Map<String, String> map = new HashMap<>();
+
         map.put("key", "value1");
         map.put("key2", "value2");
         map.put("key", "value3");
-        
+
+        for (Map.Entry<String, String> entity : map.entrySet()) {
+            map.put("asd", "dsa");
+        }
+
         testAppshutdown();
-        
-        //testClone();
-        
-//        Integer tint1 = 25;
-//        Integer tint2 = tint1;
-//        tint2 = 26;
-//        System.out.println("Integer: " + tint1.equals(tint2));
+
+        // testClone();
+
+        // Integer tint1 = 25;
+        // Integer tint2 = tint1;
+        // tint2 = 26;
+        // System.out.println("Integer: " + tint1.equals(tint2));
         //
         // Date tdate1 = new Date();
         // Date tdate2 = tdate1;
         // tdate1.setDate(2);
         // System.out.println("Date: " + tdate1.equals(tdate2));
 
-//        A a = new A();
-//        B b = new B();
-//        a.setB(b);
-//        b.setA(a);
-//        a.hashCode();
-//        b.hashCode();
-//        System.out.println(a.equals(b));
-//
-//        
+        // A a = new A();
+        // B b = new B();
+        // a.setB(b);
+        // b.setA(a);
+        // a.hashCode();
+        // b.hashCode();
+        // System.out.println(a.equals(b));
+        //
+        //
         // TypeDto typeDto2 = typeDto1;
         // TypeDto.change(typeDto2);
         //
@@ -127,7 +125,6 @@ public class PracticeApplication {
         //
         // System.out.println(newValues.length);
 
-
         // System.out.println(DateTimeUtils.addYear(null, 100));
 
         // ElasticsearchHelper.Test();
@@ -146,7 +143,7 @@ public class PracticeApplication {
         // String[] flagSplit = "ssss,2222,4444,dddd".split(",");
         // System.out.println(flagSplit[2]);
 
-        //SpringApplication.run(PracticeApplication.class, args);
+        // SpringApplication.run(PracticeApplication.class, args);
 
         // System.out.println("End Application...");
         // ApplicationContext applicationContext = new
@@ -164,15 +161,15 @@ public class PracticeApplication {
         // aspectWork.run(111);
     }
 
-    private static void testClone() throws Exception{
+    private static void testClone() throws Exception {
         TypeDto typeDto = TypeDto.build();
         TypeDto newTypeDto = CloneMachine.clone(typeDto);
         TypeDto.change(newTypeDto);
         System.out.println("newTypeDto: " + newTypeDto);
         System.out.println("typeDto   : " + typeDto);
     }
-    
-    private static void testAppshutdown(){
+
+    private static void testAppshutdown() {
         AppShutdownHandler.addDefaultHandler();
     }
 }

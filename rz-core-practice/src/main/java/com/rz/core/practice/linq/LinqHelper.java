@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -40,6 +41,9 @@ public class LinqHelper {
         // filter
         monitorDtos = monitorDtos.stream().filter(o -> MonitorDto.class == o.getClass()).collect(Collectors.toList());
 
+        // peek(do some thing in loop)
+        monitorDtos = monitorDtos.stream().filter(o -> MonitorDto.class == o.getClass()).peek(o -> System.out.println("666" + o)).collect(Collectors.toList());
+
         // any
         System.out.println(monitorDtos.stream().findAny().isPresent());
 
@@ -65,13 +69,30 @@ public class LinqHelper {
             System.out.println(e.getMessage());
         }
 
-        // map
+        // map (can Collectors.toSet)
         List<String> names = monitorDtos.stream().map(o -> o.getName()).collect(Collectors.toList());
         System.out.println(names.toString());
 
         // sort
         System.out.println(monitorDtos.stream().sorted((o1, o2) -> o2.getName().compareTo(o1.getName())).collect(Collectors.toList()));
         System.out.println(monitorDtos.stream().sorted((o1, o2) -> NumberUtils.compare(o1.getAge(), o2.getAge())).collect(Collectors.toList()));
+
+        // max
+        monitorDtos.stream().min((o1, o2) -> StringUtils.compare(o1.getName(), o2.getName())).get();
+
+        // flatMap
+        Stream<List<MonitorDto>> value10 = Stream.of(monitorDtos, monitorDtos);
+        Stream<MonitorDto> value11 = value10.flatMap(o -> o.stream());
+
+        // reduce
+        // o1 previous object, o2 next object
+        MonitorDto reduceMonitorDto = monitorDtos.stream().reduce((o1, o2) -> {
+            MonitorDto temp = new MonitorDto();
+            temp.setName(o1.getName() + o2.getName());
+            return temp;
+        }).get();
+
+        System.out.println(reduceMonitorDto);
     }
 
     public void issue() throws Exception {
@@ -86,7 +107,8 @@ public class LinqHelper {
                 System.out.println(e.getMessage());
             }
             if (null != monitorDtos && true == monitorDtos.stream().findFirst().isPresent()) {
-                monitorDto = monitorDtos.stream().sorted((o1, o2) -> NumberUtils.compare(o2.getAge(), o1.getAge())).findFirst().orElseThrow(null); // step 1
+                // step 1
+                monitorDto = monitorDtos.stream().sorted((o1, o2) -> NumberUtils.compare(o2.getAge(), o1.getAge())).findFirst().orElseThrow(null);
                 shardingDate = date;
                 break;
             }
@@ -96,13 +118,19 @@ public class LinqHelper {
         }
 
         String name = monitorDto.getName();
-        final MonitorDto finalMonitorDto = monitorDto; // same to [MonitorDto finalMonitorDto = monitorDto]
+        // same to [MonitorDto finalMonitorDto = monitorDto]
+        final MonitorDto finalMonitorDto = monitorDto;
         List<String> appInfos = Arrays.asList("111", "222", "333");
         String appInfoName = null;
-        
-        // appInfoName = appInfos.stream().filter(o -> true == StringUtils.equals(monitorDto.getName(), o)).findFirst().orElse(null); // false: monitorDto is not final, cause set value to it at step 1
-        appInfoName = appInfos.stream().filter(o -> true == StringUtils.equals(finalMonitorDto.getName(), o)).findFirst().orElse(null); // true: finalMonitorDto is final
-        appInfoName = appInfos.stream().filter(o -> true == StringUtils.equals(name, o)).findFirst().orElse(null); // true: name is final
+
+        // false: monitorDto is not final, cause set value to it at step 1
+        // appInfoName = appInfos.stream().filter(o -> true ==
+        // StringUtils.equals(monitorDto.getName(),
+        // o)).findFirst().orElse(null);
+        // true: finalMonitorDto is final
+        appInfoName = appInfos.stream().filter(o -> true == StringUtils.equals(finalMonitorDto.getName(), o)).findFirst().orElse(null);
+        // true: name is final
+        appInfoName = appInfos.stream().filter(o -> true == StringUtils.equals(name, o)).findFirst().orElse(null);
         System.out.println(shardingDate.toString() + appInfoName + name);
     }
 }
