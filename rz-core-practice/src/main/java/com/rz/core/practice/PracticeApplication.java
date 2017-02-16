@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.rz.core.CloneMachine;
+import com.rz.core.common.CloneMachine;
 import com.rz.core.practice.model.TypeDto;
 import com.rz.core.practice.util.AppShutdownHandler;
 

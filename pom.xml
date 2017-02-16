@@ -35,7 +35,7 @@
     <dependencies>
       <dependency>
         <groupId>com.rz.core</groupId>
-        <artifactId>rz-core-component</artifactId>
+        <artifactId>rz-core-common</artifactId>
         <version>${rz-core.version}</version>
       </dependency>
       <dependency>
@@ -138,6 +138,8 @@
 
   <modules>
     <module>rz-core-practice</module>
-    <module>rz-core-component</module>
+    <module>rz-core-common</module>
+    <module>rz-core-component-queuing</module>
+    <module>rz-core-component-http</module>
   </modules>
 </project>
