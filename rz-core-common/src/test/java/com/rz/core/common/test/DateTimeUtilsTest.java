@@ -2,7 +2,7 @@ package com.rz.core.common.test;
 
 import java.util.Date;
 
-import com.rz.core.common.DateTimeUtils;
+import com.rz.core.utils.DateTimeUtils;
 
 public class DateTimeUtilsTest {
 

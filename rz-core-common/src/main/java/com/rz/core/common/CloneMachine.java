@@ -1,12 +1,12 @@
 package com.rz.core.common;
 
-import java.util.List;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CloneMachine {
@@ -17,20 +17,20 @@ public class CloneMachine {
     }
 
     public static <T> T clone(T instance) throws Exception {
-        List<Object> instanceRecords = new ArrayList<>();
+        Set<Object> instanceRecords = new HashSet<>();
         return CloneMachine.clone(instance, instanceRecords, true);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static <T> T clone(T instance, List<Object> instanceRecords, boolean ignoreException) throws Exception {
+    private static <T> T clone(T instance, Set<Object> instanceRecords, boolean ignoreException) throws Exception {
         if (null == instance) {
             return null;
         }
 
-        // not allow loop reference the same instance
-        // throw StackOverflowError when invoke .hashCode() with by instance that use @Data
-        // that has loop reference
-        if (true == instanceRecords.stream().filter(o -> true == instance.equals(o)).findAny().isPresent()) {
+        // not allow loop reference the same instance.
+        // throw StackOverflowError when invoke .hashCode() with by instance that use @Data.
+        // that has loop reference.
+        if (true == instanceRecords.contains(instance)) {
             return instance;
         } else {
             instanceRecords.add(instance);

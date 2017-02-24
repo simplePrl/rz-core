@@ -67,7 +67,7 @@ public class RZHelper {
         }
     }
 
-    public static void safeDispose(Closeable instance) {
+    public static void safeClose(Closeable instance) {
         Assert.isNotNull(instance, "instance");
 
         try {
@@ -142,5 +142,20 @@ public class RZHelper {
         }
 
         return bytes;
+    }
+
+    public static int getBKDRHashCode(String value) {
+        if (null == value) {
+            return 0;
+        }
+
+        int seed = 131; // 31 131 1313 13131 131313 etc..
+        int hashCode = 0;
+
+        for (int i = 0; i < value.length(); i++) {
+            hashCode = hashCode * seed + (int) value.charAt(i);
+        }
+
+        return (int) (hashCode & 0x7FFFFFFF);
     }
 }

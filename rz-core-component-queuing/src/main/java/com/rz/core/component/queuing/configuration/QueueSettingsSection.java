@@ -1,15 +1,28 @@
 package com.rz.core.component.queuing.configuration;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
+import com.rz.core.utils.FileUtils;
 
 import lombok.Data;
 
 @Data
 public class QueueSettingsSection {
-    public String appId;
-    public boolean enableLog;
-    public List<QueueBrokerElement>   queueBrokers;
-    public List<QueueProducerElement> queueProducers;
-    public List<QueueConsumerElement> queueConsumers;
-    
+    private String appId;
+    private boolean enableLog;
+    private List<QueueBrokerElement> queueBrokers;
+    private List<QueueProducerElement> queueProducers;
+    private List<QueueConsumerElement> queueConsumers;
+
+    public static QueueSettingsSection getQueueSettings() throws IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL url = classLoader.getResource("/config/queuesettings.json");
+        String json = FileUtils.readAllText(url.getFile(), StandardCharsets.UTF_8);
+
+        return JSON.parseObject(json, QueueSettingsSection.class);
+    }
 }

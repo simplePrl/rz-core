@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 public class QueueProducerElement {
-    public String id;
-    public String brokerId;
-    public ReliabilityLevel reliabilityLevel;
-    public String exchangeName;
-    public String routingKey;
-    public int maxFrequencyPerSecond;
-    public boolean isPersistent;
+    private String id;
+    private String brokerId;
+    private ReliabilityLevel reliabilityLevel;
+    private String exchangeName;
+    private String routingKey;
+    private int maxFrequencyPerSecond;
+    private boolean needPersistent;
 }

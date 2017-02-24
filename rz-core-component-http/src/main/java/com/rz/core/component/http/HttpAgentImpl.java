@@ -13,6 +13,7 @@ import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -133,7 +134,8 @@ public class HttpAgentImpl implements HttpAgent {
 
         HttpRequestBase httpRequest = buildHttpRequest(httpMethod, url, body, headers);
 
-        try (CloseableHttpClient closeableHttpClient = HttpClientBuilder.create().setConnectionTimeToLive(this.timeout, TimeUnit.MILLISECONDS).build();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(20 * 1000).build();
+        try (CloseableHttpClient closeableHttpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
                 CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpRequest)) {
             HttpEntity httpEntity = closeableHttpResponse.getEntity();
             String charset = this.getcharset(httpEntity, "UTF-8");

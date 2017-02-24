@@ -1,7 +1,11 @@
 package com.rz.core.practice;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +20,6 @@ import com.rz.core.practice.util.AppShutdownHandler;
 // "com.hujiang.notifycenter.apppush", "com.hujiang.notifycenter.core" })
 // @Import({PracticeConfig.class})
 public class PracticeApplication {
-
     private volatile int x;
     private int y;
 
@@ -32,8 +35,15 @@ public class PracticeApplication {
     }
 
     public static void main(String[] args) throws Exception {
-        Map<String, String> map = new HashMap<>();
+        Set<Object> set = new HashSet<Object>();
+        Object obj = new Object();
+        set.add(obj);
+        set.add(obj);
 
+        Collections.singletonList(new Object());
+        Collections.unmodifiableList(Arrays.asList("1", "2"));
+
+        Map<String, String> map = new HashMap<>();
         map.put("key", "value1");
         map.put("key2", "value2");
         map.put("key", "value3");

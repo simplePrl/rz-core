@@ -1,4 +1,4 @@
-package com.rz.core.common;
+package com.rz.core.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
