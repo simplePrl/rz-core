@@ -2,13 +2,20 @@ package com.rz.core.common;
 
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -23,6 +30,10 @@ import javax.crypto.spec.IvParameterSpec;
 import org.apache.commons.lang3.StringUtils;
 
 public class RZHelper {
+    private final static byte[] PASSWORD_KEY = new byte[] { 'h', 'j', 'n', 'o', 't', 'i', 'f', 'y' };
+    private final static byte[] PASSWORD_IV = new byte[] { 'h', 'j', 't', 'p', 'm', 's', 'g', 's' };
+    private static List<String> ipV4s = null;
+
     public static boolean isBaseClazz(Class<?> clazz) {
         if (null == clazz) {
             new IllegalAccessException("clazz");
@@ -77,9 +88,6 @@ public class RZHelper {
             // instance.");
         }
     }
-
-    public final static byte[] PASSWORD_KEY = new byte[] { 'h', 'j', 'n', 'o', 't', 'i', 'f', 'y' };
-    public final static byte[] PASSWORD_IV = new byte[] { 'h', 'j', 't', 'p', 'm', 's', 'g', 's' };
 
     public static String encrypt(String value) throws InvalidKeyException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException,
             InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
@@ -157,5 +165,32 @@ public class RZHelper {
         }
 
         return (int) (hashCode & 0x7FFFFFFF);
+    }
+
+    public static String getIpV4() throws SocketException {
+        if (null != RZHelper.ipV4s) {
+            return RZHelper.ipV4s.get(0);
+        }
+
+        List<String> hostAddresses = new ArrayList<>();
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        InetAddress inetAddress;
+        while (networkInterfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = (NetworkInterface) networkInterfaces.nextElement();
+            Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+            while (inetAddresses.hasMoreElements()) {
+                inetAddress = (InetAddress) inetAddresses.nextElement();
+                if (null != inetAddress && inetAddress instanceof Inet4Address) {
+                    String hostAddress = inetAddress.getHostAddress();
+                    if (hostAddress.equals("127.0.0.1")) {
+                        continue;
+                    }
+                    hostAddresses.add(hostAddress);
+                }
+            }
+        }
+
+        RZHelper.ipV4s = hostAddresses;
+        return hostAddresses.get(0);
     }
 }

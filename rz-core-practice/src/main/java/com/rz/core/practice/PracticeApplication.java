@@ -6,11 +6,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Import;
 
 import com.rz.core.common.CloneMachine;
+import com.rz.core.practice.config.PracticeConfig;
+import com.rz.core.practice.config.SelfXmlBeanConfig;
+import com.rz.core.practice.dynamic.AspectWork;
+import com.rz.core.practice.model.NormalDto;
 import com.rz.core.practice.model.TypeDto;
 import com.rz.core.practice.util.AppShutdownHandler;
 
@@ -18,43 +26,15 @@ import com.rz.core.practice.util.AppShutdownHandler;
 // @ComponentScan({ "com.hujiang.basic.framework.rest",
 // "com.hujiang.basic.framework.plugin.cache",
 // "com.hujiang.notifycenter.apppush", "com.hujiang.notifycenter.core" })
-// @Import({PracticeConfig.class})
+// @Import({ PracticeConfig.class })
+// @Import({ SelfXmlBeanConfig.class })
 public class PracticeApplication {
-    private volatile int x;
-    private int y;
-
-    private AtomicInteger z;
-
-    public synchronized void addY(int value) {
-        y = value;
-        y++;
-    }
-
-    public void addZ() {
-        int result = z.incrementAndGet();
-    }
-
     public static void main(String[] args) throws Exception {
-        Set<Object> set = new HashSet<Object>();
-        Object obj = new Object();
-        set.add(obj);
-        set.add(obj);
 
-        Collections.singletonList(new Object());
-        Collections.unmodifiableList(Arrays.asList("1", "2"));
-
-        Map<String, String> map = new HashMap<>();
-        map.put("key", "value1");
-        map.put("key2", "value2");
-        map.put("key", "value3");
-
-        for (Map.Entry<String, String> entity : map.entrySet()) {
-            map.put("asd", "dsa");
-        }
-
-        testAppshutdown();
-
+        // testCollection();
+        // testAppShutdown();
         // testClone();
+        testRunString();
 
         // Integer tint1 = 25;
         // Integer tint2 = tint1;
@@ -153,22 +133,7 @@ public class PracticeApplication {
         // String[] flagSplit = "ssss,2222,4444,dddd".split(",");
         // System.out.println(flagSplit[2]);
 
-        // SpringApplication.run(PracticeApplication.class, args);
-
-        // System.out.println("End Application...");
-        // ApplicationContext applicationContext = new
-        // AnnotationConfigApplicationContext(PracticeConfig.class);
-        //// AnnotationConfigApplicationContext applicationContext = new
-        // AnnotationConfigApplicationContext();
-        //// applicationContext.register(PracticeConfig.class);
-        //// applicationContext.refresh();
-        //
-        //// System.out.println(StringUtils.join(applicationContext.getBeanDefinitionNames(),
-        // ","));
-        // AspectWork aspectWork = applicationContext.getBean(AspectWork.class);
-        //// System.out.println(null == worker);
-        //
-        // aspectWork.run(111);
+        System.out.println("End PracticeApplication...");
     }
 
     private static void testClone() throws Exception {
@@ -179,7 +144,51 @@ public class PracticeApplication {
         System.out.println("typeDto   : " + typeDto);
     }
 
-    private static void testAppshutdown() {
+    private static void testAppShutdown() {
         AppShutdownHandler.addDefaultHandler();
+    }
+
+    private static void testCollection() {
+        Set<Object> set = new HashSet<Object>();
+        Object obj = new Object();
+        set.add(obj);
+        set.add(obj);
+
+        Collections.singletonList(new Object());
+        Collections.unmodifiableList(Arrays.asList("1", "2"));
+
+        Map<String, String> map = new HashMap<>();
+        map.put("key", "value1");
+        map.put("key2", "value2");
+        map.put("key", "value3");
+
+        for (Map.Entry<String, String> entity : map.entrySet()) {
+            map.put("asd", "dsa");
+        }
+    }
+
+    private static void testRunString() {
+        boolean flag = false;
+
+        if (flag) {
+            // need @Import({ PracticeConfig.class })
+            SpringApplication.run(PracticeApplication.class, new String[] {});
+
+        } else {
+            Class<?> configClazz = PracticeConfig.class;
+            configClazz = SelfXmlBeanConfig.class;
+
+            ApplicationContext applicationContext = new AnnotationConfigApplicationContext(configClazz);
+            // can lazy register and refresh config
+            // ((AnnotationConfigApplicationContext) applicationContext).register(configClazz);
+            // ((AnnotationConfigApplicationContext) applicationContext).refresh();
+            System.out.println(StringUtils.join(applicationContext.getBeanDefinitionNames(), ","));
+
+            NormalDto normalDto = (NormalDto) applicationContext.getBean("dataSourceCheck");
+            System.out.println(normalDto);
+
+//            AspectWork aspectWork = applicationContext.getBean(AspectWork.class);
+//            aspectWork.run(111);
+        }
     }
 }
