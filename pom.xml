@@ -12,6 +12,8 @@
   <packaging>pom</packaging>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  
     <guava.version>20.0</guava.version>
     <org.elasticsearch.version>2.4.2</org.elasticsearch.version>
     <org.projectlombok.version>1.16.10</org.projectlombok.version>

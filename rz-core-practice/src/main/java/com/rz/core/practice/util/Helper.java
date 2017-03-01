@@ -49,96 +49,9 @@ public class Helper {
         System.out.println("End Helper");
     }
 
-    private void reflectTest() throws Exception {
-        MonitorDto monitorDto = new MonitorDto();
-        monitorDto.setName("adasdasd");
-        // System.out.println(monitorDto.getName());
-
-        // Class<?> classclassType = monitorDto.getClass();
-        Class<MonitorDto> classclassType = MonitorDto.class;
-
-        Field[] fields = classclassType.getDeclaredFields();
-        for (Field field : fields) {
-            // Annotation[] annotations = classclassType.getAnnotations();
-            // System.out.println(annotations.length);
-            // for(Annotation annotation : annotations){
-            // System.out.println(annotation.annotationclassType().getName());
-            // }
-
-            TagAnnotation tagAnnotation = field.getAnnotation(TagAnnotation.class);
-            if (null != tagAnnotation) {
-                System.out.println(tagAnnotation.value());
-            }
-            System.out.println(field.getName());
-        }
-
-        Method[] methods = classclassType.getMethods();
-        for (Method method : methods) {
-            if (true == "setName".equalsIgnoreCase(method.getName())) {
-                method.invoke(monitorDto, "222222");
-            } else if (true == "getName".equalsIgnoreCase(method.getName())) {
-                System.out.println(method.invoke(monitorDto).toString());
-            }
-        }
-
-        System.out.println(monitorDto.getName());
-    }
-
     private void throwException() throws Exception {
         Thread.sleep(1000);
         throw new Exception("aasdasd");
-    }
-
-    private void lambdaTest(Function<String, Integer> callBack) {
-        // List<String> list1 = Collections.synchronizedList(new ArrayList<String>());
-        List<String> list2 = new ArrayList<String>();
-        List<String> list3 = new CopyOnWriteArrayList<>();
-        Map<String, Integer> map1 = new ConcurrentHashMap<String, Integer>();
-        // Map<String, Integer> map2 = Collections.synchronizedMap(new HashMap<String, Integer>());
-        Map<String, Integer> map3 = new HashMap<String, Integer>();
-        Queue<String> queue1 = new ConcurrentLinkedQueue<String>();
-        Queue<String> queue2 = new LinkedList<String>();
-        Queue<String> queue3 = new ArrayBlockingQueue<>(100);
-
-        Consumer<String> asd = o -> {
-
-        };
-        int re = callBack.apply("asd");
-
-        List<MonitorDto> monitorDtos = new ArrayList<MonitorDto>();
-        // System.out.println(monitorDtos.size());
-        // monitorDtos.forEach
-        MonitorDto monitorDto = new MonitorDto();
-        monitorDto.setName("name2");
-        monitorDtos.add(monitorDto);
-        monitorDto = new MonitorDto();
-        monitorDto.setName("name1");
-        monitorDtos.add(monitorDto);
-        monitorDto = new MonitorDto();
-        monitorDto.setName("name3");
-        monitorDtos.add(monitorDto);
-        // monitorDtos.forEach(o->System.out.println(o));
-        Stream<MonitorDto> streamMonitorDtos = monitorDtos.stream();
-        streamMonitorDtos = streamMonitorDtos/* .parallel() */.filter(o -> o.getName().startsWith("name"));
-        // streamMonitorDtos.filter(o->o.getName().endsWith("1"));
-        streamMonitorDtos = streamMonitorDtos.sorted(new Comparator<MonitorDto>() {
-            @Override
-            public int compare(MonitorDto arg0, MonitorDto arg1) {
-                return arg0.getName().compareTo(arg1.getName());
-            }
-        });
-        streamMonitorDtos = streamMonitorDtos.sorted((o0, o1) -> o0.getName().compareTo(o1.getName()));
-
-        // Stream<Object> mapDtos = streamMonitorDtos.map(o -> {
-        // MapDto mapDto = new MapDto();
-        // mapDto.setEnglishName("English_" + o.getName());
-        // mapDto.setResult(0 == o.getAge() % 2);
-        // return mapDto;
-        // });
-        // mapDtos.forEach(o -> System.out.println(((MapDto)
-        // o).getEnglishName()));
-
-        System.out.println("monitorDtos size: " + monitorDtos.size());
     }
 
     private Object convertTest(Class<?> classType, String value) throws Exception {
@@ -182,17 +95,6 @@ public class Helper {
         } else {
             throw new Exception("NotSupported");
         }
-    }
-
-    private void threadTest() {
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        service.submit(() -> {
-
-        });
-
-        new Thread(() -> {
-
-        }).start();
     }
 
     private <T extends Enum<T>> T getEnumFromString(Class<T> classType, String value) {

@@ -134,7 +134,7 @@ public class HttpAgentImpl implements HttpAgent {
 
         HttpRequestBase httpRequest = buildHttpRequest(httpMethod, url, body, headers);
 
-        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(20 * 1000).build();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(this.timeout).build();
         try (CloseableHttpClient closeableHttpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
                 CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpRequest)) {
             HttpEntity httpEntity = closeableHttpResponse.getEntity();
