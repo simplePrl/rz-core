@@ -2,6 +2,7 @@ package com.rz.core.practice;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,12 +13,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Import;
 
 import com.rz.core.common.CloneMachine;
 import com.rz.core.practice.config.PracticeConfig;
 import com.rz.core.practice.config.SelfXmlBeanConfig;
-import com.rz.core.practice.dynamic.AspectWork;
 import com.rz.core.practice.model.NormalDto;
 import com.rz.core.practice.model.TypeDto;
 import com.rz.core.practice.util.AppShutdownHandler;
@@ -31,6 +30,9 @@ import com.rz.core.practice.util.AppShutdownHandler;
 public class PracticeApplication {
     public static void main(String[] args) throws Exception {
 
+        Date date = new Date(2015, 8, 8, 12, 12, 12);
+        Date now = new Date(date.getTime());
+        
         // testCollection();
         // testAppShutdown();
         // testClone();

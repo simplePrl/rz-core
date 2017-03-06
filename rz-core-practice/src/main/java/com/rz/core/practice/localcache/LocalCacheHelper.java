@@ -18,6 +18,7 @@ public class LocalCacheHelper {
 						arg0 = null == arg0 ? "" : arg0;
 						Date date = new Date();
 
+						// cannot return null
 						return arg0 + date.toString();
 					}
 				});
