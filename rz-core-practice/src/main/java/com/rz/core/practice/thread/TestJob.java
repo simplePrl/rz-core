@@ -24,5 +24,4 @@ public class TestJob implements Job {
 		System.out.println("End..." + Thread.currentThread().getId() + "-----" + context.getJobDetail().getKey().getName() + ": "
 				+ new Date().toString());
 	}
-
 }

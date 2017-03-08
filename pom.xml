@@ -31,6 +31,9 @@
     <org.mongodb.version>3.4.1</org.mongodb.version>
     <org.apache.logging.log4j.version>2.7</org.apache.logging.log4j.version>
     <org.slf4j-api.version>1.7.22</org.slf4j-api.version>
+    <org.apache.curator.curator-framework.version>2.11.1</org.apache.curator.curator-framework.version>
+    <org.springframework.version>4.3.7.RELEASE</org.springframework.version>
+    <commons-logging.version>1.2</commons-logging.version>
   </properties>
 
   <dependencyManagement>
@@ -100,11 +103,11 @@
         <artifactId>aspectjweaver</artifactId>
         <version>${org.aspectj.version}</version>
       </dependency>
-      <dependency>
+      <!--dependency> comment for scheduling zookeeper
         <groupId>org.apache.zookeeper</groupId>
         <artifactId>zookeeper</artifactId>
         <version>${org.apache.zookeeper.version}</version>
-      </dependency>
+      </dependency-->
       <dependency>
         <groupId>com.rabbitmq</groupId>
         <artifactId>amqp-client</artifactId>
@@ -135,6 +138,26 @@
         <artifactId>slf4j-api</artifactId>
         <version>${org.slf4j-api.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-framework</artifactId>
+        <version>${org.apache.curator.curator-framework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${commons-logging.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -143,5 +166,6 @@
     <module>rz-core-common</module>
     <module>rz-core-component-queuing</module>
     <module>rz-core-component-http</module>
+    <module>rz-core-recipe</module>
   </modules>
 </project>
